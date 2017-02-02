@@ -4,13 +4,16 @@ import requests
 from lxml import html
 from collections import defaultdict
 
-msg = 'http://boards.fool.com/rankings-10oct2016-32428992.aspx'
+msg = 'http://boards.fool.com/rankings-30jan2017-32576377.aspx'
+
+# print src url
+print 'url = ', msg
 
 r = requests.get(msg)
 
 tree = html.fromstring(r.content)
 
-pre = tree.xpath('//*[@id="tdMsg"]/blockquote/pre/text()')
+pre = tree.xpath('//*[@id="message"]/blockquote/pre/text()')
 
 del pre[0]   # remove header line 'Screen 1 2 3 4...'
 
@@ -20,8 +23,14 @@ tickers = defaultdict(int)
 for line in pre:
   cols = line.split()
 
-  screen = cols[0] #discard the first column which is the screen name
-  del cols[0]
+  screen = cols[0] # get screen name
+
+  #skip short screens
+  if screen.startswith('SHORT'):
+    print 'skipping screen', screen
+    continue
+
+  del cols[0] #discard the first column which is the screen name
 
   weight = 1000
 
@@ -32,10 +41,6 @@ for line in pre:
     weight = weight - 10
 
     tickers[ticker] += score
-
-
-# print src url
-print 'url = ', msg
 
 # sort on value descending, print keys and score
 for w in sorted(tickers, key=tickers.get, reverse=True):
