@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import requests
 from lxml import html
 from collections import defaultdict
 
-msg = 'http://boards.fool.com/rankings-30jan2017-32576377.aspx'
+msg = 'http://boards.fool.com/rankings-20mar2017-32643417.aspx'
 
 # print src url
-print 'url = ', msg
+print ('url = ', msg)
 
 r = requests.get(msg)
 
@@ -27,7 +27,7 @@ for line in pre:
 
   #skip short screens
   if screen.startswith('SHORT'):
-    print 'skipping screen', screen
+    print ('skipping screen', screen)
     continue
 
   del cols[0] #discard the first column which is the screen name
@@ -44,4 +44,4 @@ for line in pre:
 
 # sort on value descending, print keys and score
 for w in sorted(tickers, key=tickers.get, reverse=True):
-  print w, tickers[w]
+  print (w, tickers[w])
