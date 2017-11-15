@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
+import sys
 import requests
 from lxml import html
 from collections import defaultdict
 
-msg = 'http://boards.fool.com/rankings-20mar2017-32643417.aspx'
+if len(sys.argv) < 2:
+  print("usage: %s <url>" % sys.argv[0])
+  exit()
+
+msg = sys.argv[1]
+# msg = 'http://boards.fool.com/rankings-13nov2017-32893692.aspx'
 
 # print src url
 print ('url = ', msg)
@@ -44,4 +50,4 @@ for line in pre:
 
 # sort on value descending, print keys and score
 for w in sorted(tickers, key=tickers.get, reverse=True):
-  print (w, tickers[w])
+  print ("%s %s" % (w, tickers[w]))
